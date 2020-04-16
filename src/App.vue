@@ -15,8 +15,8 @@
 import * as tf from '@tensorflow/tfjs'
 import { loadGraphModel } from '@tensorflow/tfjs-converter'
 
-const MODEL_URL = 'http://localhost:8081/web_model/model.json'
-
+const MODEL_URL = 'https://objectstorage.eu-frankfurt-1.oraclecloud.com/n/frcbvqhjxcoj/b/panel-model/o/model.json'
+const CLASSES = {1:"panel", 2:"switch", 3:"toggle"}
 export default {
   name: 'app',
 
@@ -174,6 +174,7 @@ export default {
         const maxY = predictionBoxes[i * 4 + 2] * 450
         const maxX = predictionBoxes[i * 4 + 3] * 600
         const score = predictionScores[i * 3] * 100
+        const pred_cls = CLASSES[predictionClasses[i]]
 
         if (score > 75) {
           ctx.beginPath()
@@ -186,7 +187,7 @@ export default {
           ctx.shadowBlur = 10
           ctx.font = '14px Arial bold'
           ctx.fillText(
-            `${score.toFixed(1)} - Jagermeister bottle`,
+            `${score.toFixed(1)} - ${pred_cls}`,
             minX,
             minY > 10 ? minY - 5 : 10
           )
